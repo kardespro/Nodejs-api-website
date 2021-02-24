@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const Discord = require("discord.js");
 const client = new Discord.Client();
-
+const Database = require("plasma.db"); 
+const db = new Database("./veritabani/db.json");
+db.ayarla("kullanim", 0);
 //Kurulum
 const config = {
 logkanalid: "",//log Kanal Idsi
@@ -29,6 +31,7 @@ var password = generator.generate({
     numbers: true //rakamlardan oluşumu
    //not:true aktiv demekdir
 });
+db.ekle("kullanim", 1); 
 let result = [];
 
 res.json(password);
@@ -37,6 +40,13 @@ res.json(password);
 console.log("======Sifre Olusturuldu====");
 console.log(password);
 console.log("=======kardespro.cf==========");
+});
+// ADMIN
+app.get("/admin/kullanimsayi", (req,res) => {
+const k = db.al("kullanim");
+res.json({
+kullanimsayi:k
+});
 });
 
 app.listen(config.PORT);
